@@ -35,8 +35,6 @@ function startTime() {
     
     // document.getElementById('time-shadow').innerHTML = hours + ':' + minutes + ':' + seconds + meridian;
     let time = setTimeout(startTime, 500);
-
-    console.log(hexColorStr);
 }
 
 startTime();
