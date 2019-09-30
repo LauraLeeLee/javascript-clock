@@ -24,7 +24,7 @@ function startTime() {
 
     let hexColorStr = '#' + hours + minutes + seconds;
 
-    (minutes == 00 && seconds == 00) ? setTimeout(changeImage(), 900) : "";
+    (minutes == 00 && seconds == 00) ? setTimeout(changeImage(), 1900) : "";
 
     document.getElementsByTagName('body')[0].style.backgroundColor = hexColorStr;
 
@@ -40,24 +40,56 @@ function startTime() {
 startTime();
 
 function changeImage() {
-    var keyword = "golden retriever";
+    let keyword = "golden retriever";
 
     $(document).ready(function(){
 
-        $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
-        {
-            tags: keyword,
-            tagmode: "any",
-            format: "json"
-        },
-        function(data) {
-            var rnd = Math.floor(Math.random() * data.items.length);
+    //     $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+    //     {
+    //         tags: keyword,
+    //         tagmode: "any",
+    //         format: "json"
+    //     },
+    //     function(data) {
+    //         let randomImg = Math.floor(Math.random() * data.items.length);
 
-            var image_src = data.items[rnd]['media']['m'].replace("_m", "_b");
+    //         let image_src = data.items[randomImg]['media']['m'].replace("_m", "_b");
+           
+    //         document.getElementById('image').src = image_src;
+    //         console.log(data);
+    //         console.log(randomImg);
+    //     });
+    // });  
+
+        $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=53720a5aa39c0c8378c8831fc1c48b6d&jsoncallback=?",
+           { tags: keyword,
+            tagmode: 'any',
+            format: 'json',
+           },
+        function(data) {
+            let items = data.photos.photo;
+            
+            let randomImg = Math.floor(Math.random() * items.length);
+            let farmId = items[randomImg]['farm'];
+            let serverId = items[randomImg]['server'];
+            let photoId = items[randomImg]['id'];
+            let secretId = items[randomImg]['secret'];
+
+            console.log(farmId);
+            console.log(photoId);
+            console.log(serverId);
+            console.log(secretId);
+
+            let image_src = `https://farm${farmId}.staticflickr.com/${serverId}/${photoId}_${secretId}_m.jpg`;
            
             document.getElementById('image').src = image_src;
+            console.log(data);
+            console.log("items", ":", items);
+            console.log(items.length);
+            console.log(image_src);
+            console.log(keyword);
         });
     });
-}
+ }
 
 changeImage();
